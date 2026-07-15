@@ -272,7 +272,8 @@ export function Home() {
               Perche gli ospiti tornano da Kokoro
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-6 text-brand-500">
-              Atmosfera curata, prenotazione semplice e una cucina pensata per essere ricordata.
+              Testimonianze illustrative dell’esperienza Kokoro. Alla pubblicazione verranno
+              collegate le recensioni reali del ristorante.
             </p>
           </Reveal>
 
@@ -307,7 +308,7 @@ export function Home() {
                         {r.name}
                       </p>
                       <p className={featured ? 'text-xs text-brand-300' : 'text-xs text-brand-400'}>
-                        Cliente Kokoro Sushi Roma
+                        Esperienza da Kokoro Sushi Roma
                       </p>
                     </div>
                   </div>

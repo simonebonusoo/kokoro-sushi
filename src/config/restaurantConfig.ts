@@ -246,10 +246,12 @@ export const restaurantConfig: RestaurantConfig = {
       alt: 'Tataki di salmone con edamame da Kokoro Sushi Roma',
     },
   ],
+  // Testimonianze illustrative (non attribuite a persone reali): mostrano come
+  // apparirebbero le recensioni. In produzione si collegano quelle reali (es. Google).
   reviews: [
-    { name: 'Martina R.', text: 'Location elegante, menu ampio e accoglienza molto curata.', rating: 5 },
-    { name: 'Davide P.', text: 'Prenotazione online rapida e sushi presentato benissimo.', rating: 5 },
-    { name: 'Elena F.', text: 'Ottima scelta tra cucina giapponese e cinese, atmosfera rilassata.', rating: 5 },
+    { name: 'Ospite Kokoro', text: 'Location elegante, menu ampio e accoglienza molto curata.', rating: 5 },
+    { name: 'Cliente in sala', text: 'Prenotazione online rapida e sushi presentato benissimo.', rating: 5 },
+    { name: 'Ospite a cena', text: 'Ottima scelta tra cucina giapponese e cinese, atmosfera rilassata.', rating: 5 },
   ],
 };
 
