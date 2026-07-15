@@ -127,6 +127,15 @@ Target: **demo.kokoro.bnsstudio.it** (SPA statica).
 
 ---
 
+## Analytics (traffico demo)
+
+Integrato **Vercel Web Analytics** (`@vercel/analytics`, componente `<Analytics />` in `src/App.tsx`).
+- Cookieless (nessun banner consenso), traccia le visite **per singola pagina** anche sulle route interne della SPA.
+- Attivo **solo in produzione su Vercel**: in locale non invia dati.
+- **Attivazione richiesta**: nel progetto Vercel → tab **Analytics → Enable Web Analytics**. Senza questo passaggio lo script non raccoglie dati.
+- Dove leggere i dati: dashboard Vercel → **Analytics** (visite, visitatori unici, pagine più viste, provenienza, dispositivo).
+- Piano gratuito (Hobby) sufficiente per una demo; possibile leggera sottostima per utenti con ad-blocker.
+
 ## Problemi noti / note
 
 - Warning dev-only di React Router v7 in console: **non compaiono nella build di produzione**, innocui.

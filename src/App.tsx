@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 import { AuthProvider } from '@/context/AuthContext';
 import { AppRoutes } from '@/routes/AppRoutes';
 import { applyThemeFromConfig } from '@/config/restaurantConfig';
@@ -15,6 +16,9 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        {/* Vercel Web Analytics: traccia le visite per singola pagina (anche le
+            route interne della SPA). Cookieless, attivo solo in produzione su Vercel. */}
+        <Analytics />
         <Toaster
           position="top-right"
           toastOptions={{
