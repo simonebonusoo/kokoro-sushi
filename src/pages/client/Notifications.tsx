@@ -1,14 +1,26 @@
+import { useNavigate } from 'react-router-dom';
 import { Bell, BellOff, Check } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useAuth } from '@/context/AuthContext';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { LoadingState } from '@/components/ui/LoadingState';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { formatDateTime } from '@/utils/format';
 import { clsx } from 'clsx';
+import type { Notification } from '@/types/database';
 
 export function ClientNotifications() {
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications();
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
+
+  const openNotification = (n: Notification) => {
+    if (!n.read) markAsRead(n.id);
+    const aboutReservation = Boolean(n.reservation_id) || (n.type ?? '').includes('reservation');
+    if (isAdmin) navigate(aboutReservation ? '/admin/calendario' : '/admin');
+    else navigate(aboutReservation ? '/dashboard/prenotazioni' : '/dashboard/notifiche');
+  };
 
   return (
     <div className="space-y-6">
@@ -34,7 +46,11 @@ export function ClientNotifications() {
           {notifications.map((n) => (
             <Card
               key={n.id}
-              className={clsx('flex items-start gap-4', !n.read && 'border-l-4 border-l-accent-500')}
+              onClick={() => openNotification(n)}
+              className={clsx(
+                'flex cursor-pointer items-start gap-4 transition hover:border-brand-200 hover:shadow-sm',
+                !n.read && 'border-l-4 border-l-accent-500'
+              )}
             >
               <div className="mt-0.5 rounded-full bg-brand-100 p-2 text-brand-600">
                 <Bell className="h-4 w-4" />
@@ -50,7 +66,10 @@ export function ClientNotifications() {
               </div>
               {!n.read && (
                 <button
-                  onClick={() => markAsRead(n.id)}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    markAsRead(n.id);
+                  }}
                   className="text-xs font-medium text-brand-500 hover:text-brand-800"
                 >
                   Segna letta

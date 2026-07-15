@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { Analytics } from '@vercel/analytics/react';
 import { AuthProvider } from '@/context/AuthContext';
 import { AppRoutes } from '@/routes/AppRoutes';
+import { ScrollToTop } from '@/components/ScrollToTop';
 import { applyThemeFromConfig } from '@/config/restaurantConfig';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <AppRoutes />
         {/* Vercel Web Analytics: traccia le visite per singola pagina (anche le

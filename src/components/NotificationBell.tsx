@@ -1,13 +1,30 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bell, Check } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useAuth } from '@/context/AuthContext';
 import { formatDateTime } from '@/utils/format';
+import type { Notification } from '@/types/database';
 
 export function NotificationBell() {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  /** Destinazione in base al ruolo: il pannello che gestisce quella notifica. */
+  const destinationFor = (n: Notification) => {
+    const aboutReservation = Boolean(n.reservation_id) || (n.type ?? '').includes('reservation');
+    if (isAdmin) return aboutReservation ? '/admin/calendario' : '/admin';
+    return aboutReservation ? '/dashboard/prenotazioni' : '/dashboard/notifiche';
+  };
+
+  const handleOpenNotification = (n: Notification) => {
+    if (!n.read) markAsRead(n.id);
+    setOpen(false);
+    navigate(destinationFor(n));
+  };
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -54,7 +71,7 @@ export function NotificationBell() {
               notifications.slice(0, 12).map((n) => (
                 <button
                   key={n.id}
-                  onClick={() => markAsRead(n.id)}
+                  onClick={() => handleOpenNotification(n)}
                   className={`flex w-full flex-col gap-0.5 border-b border-brand-50 px-4 py-3 text-left transition hover:bg-brand-50 ${
                     !n.read ? 'bg-brand-50/60' : ''
                   }`}
