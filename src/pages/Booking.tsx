@@ -19,6 +19,7 @@ import { fetchOpeningHours, fetchClosuresForDate } from '@/lib/openingHours';
 import { fetchDayActiveReservations, createReservation } from '@/lib/reservations';
 import { formatDate, formatTime } from '@/utils/format';
 import { restaurantConfig } from '@/config/restaurantConfig';
+import { analytics } from '@/lib/analytics';
 
 const steps = ['Dati', 'Orario', 'Conferma'];
 
@@ -154,6 +155,10 @@ export function Booking() {
         partySize,
         area: confirmedArea?.name ?? 'Ristorante',
         table: confirmedTable?.name ?? 'Tavolo',
+      });
+      analytics.prenotazioneCompletata({
+        area: confirmedArea?.name ?? 'Ristorante',
+        persone: partySize,
       });
       toast.success('Richiesta di prenotazione ricevuta');
     } catch (e) {

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { Check, ChevronDown, RotateCcw, Search, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useMenuItems } from '@/hooks/useMenuItems';
+import { analytics } from '@/lib/analytics';
 import { MenuItemCard } from '@/components/MenuItemCard';
 import { LoadingState } from '@/components/ui/LoadingState';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -54,6 +55,19 @@ export function Menu() {
   const [category, setCategory] = useState<string>(ALL_CATEGORIES);
   const [search, setSearch] = useState('');
   const [menuSection, setMenuSection] = useState<MenuSection>('all');
+  const searchTracked = useRef(false);
+
+  // Registra un evento demo quando l'utente inizia una ricerca (una volta per ricerca).
+  useEffect(() => {
+    if (search.trim()) {
+      if (!searchTracked.current) {
+        searchTracked.current = true;
+        analytics.menuRicerca();
+      }
+    } else {
+      searchTracked.current = false;
+    }
+  }, [search]);
 
   const categoryOptions = useMemo(() => {
     const knownOrder = new Map(CATEGORY_ORDER.map((item, index) => [item.toLowerCase(), index]));

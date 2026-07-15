@@ -5,6 +5,7 @@ import { clsx } from 'clsx';
 import { restaurantConfig } from '@/config/restaurantConfig';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { analytics } from '@/lib/analytics';
 import { Button } from '@/components/ui/Button';
 import { NotificationBell } from '@/components/NotificationBell';
 import { BrandLogo } from '@/components/BrandLogo';
@@ -125,7 +126,7 @@ export function Navbar() {
                   Accedi
                 </Button>
               </Link>
-              <Link to="/prenota">
+              <Link to="/prenota" onClick={() => analytics.prenotaCta('navbar')}>
                 <Button size="sm">
                   Prenota un tavolo
                 </Button>
@@ -137,7 +138,10 @@ export function Navbar() {
         {/* Mobile toggle */}
         <button
           className="-mr-2 rounded-lg p-2 text-brand-800 transition hover:bg-brand-100 md:hidden"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true);
+            analytics.menuMobileAperto();
+          }}
           aria-label="Apri il menu"
           aria-expanded={open}
           aria-haspopup="dialog"
@@ -272,7 +276,13 @@ function MobileMenu({
                   Accedi
                 </Button>
               </Link>
-              <Link to="/prenota" onClick={onClose}>
+              <Link
+                to="/prenota"
+                onClick={() => {
+                  analytics.prenotaCta('menu-mobile');
+                  onClose();
+                }}
+              >
                 <Button size="md" fullWidth>
                   Prenota tavolo
                 </Button>

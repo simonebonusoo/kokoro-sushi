@@ -10,6 +10,7 @@ import {
   Waves,
 } from 'lucide-react';
 import { restaurantConfig } from '@/config/restaurantConfig';
+import { analytics } from '@/lib/analytics';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Reveal } from '@/components/motion/Reveal';
@@ -46,7 +47,7 @@ export function Home() {
               {c.heroSubtitle}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/prenota">
+              <Link to="/prenota" onClick={() => analytics.prenotaCta('home-hero')}>
                 <Button size="lg">
                   Prenota un tavolo <ArrowRight className="h-5 w-5" />
                 </Button>

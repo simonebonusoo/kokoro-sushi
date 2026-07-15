@@ -5,6 +5,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { analytics } from '@/lib/analytics';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -41,6 +42,9 @@ export function Login() {
   const onSubmit = async (data: FormData) => {
     try {
       await signIn(data.email, data.password);
+      if (!isSupabaseConfigured) {
+        analytics.loginDemo(data.email === 'admin@kokoro.it' ? 'ristoratore' : 'cliente');
+      }
       toast.success('Bentornato!');
       navigate(from, { replace: true });
     } catch (e) {

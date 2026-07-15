@@ -136,6 +136,21 @@ Integrato **Vercel Web Analytics** (`@vercel/analytics`, componente `<Analytics 
 - Dove leggere i dati: dashboard Vercel → **Analytics** (visite, visitatori unici, pagine più viste, provenienza, dispositivo).
 - Piano gratuito (Hobby) sufficiente per una demo; possibile leggera sottostima per utenti con ad-blocker.
 
+### Eventi personalizzati (funnel)
+
+Definiti in `src/lib/analytics.ts`, visibili in Vercel → **Analytics → Events**. Misurano l'interesse reale, non solo le pagine viste:
+
+| Evento | Quando scatta | Proprietà |
+|---|---|---|
+| `prenota_cta` | Click su una CTA "Prenota" | `origine` = navbar · home-hero · menu-mobile |
+| `prenotazione_completata` | Prenotazione confermata (**conversione**) | `area`, `persone` |
+| `menu_ricerca` | Uso della ricerca nel menu digitale | — |
+| `menu_mobile_aperto` | Apertura del menu mobile | — |
+| `login_demo` | Accesso con account demo | `ruolo` = cliente · ristoratore |
+
+Lettura tipica del funnel: visite `/` → `prenota_cta` → visite `/prenota` → `prenotazione_completata`.
+Gli eventi, come le visite, arrivano **solo dalla produzione su Vercel** (in locale sono no-op).
+
 ## Problemi noti / note
 
 - Warning dev-only di React Router v7 in console: **non compaiono nella build di produzione**, innocui.
