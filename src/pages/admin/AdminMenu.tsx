@@ -168,11 +168,15 @@ export function AdminMenu() {
                 </p>
               )}
               <div className="mt-3 flex flex-wrap gap-2">
-                {item.badge && <Badge tone="accent">{item.badge}</Badge>}
                 {item.is_vegetarian && <Badge tone="neutral">Vegetariano</Badge>}
                 {item.is_vegan && <Badge tone="neutral">Vegano</Badge>}
                 {item.is_spicy && <Badge tone="accent">Piccante</Badge>}
                 {item.is_raw && <Badge tone="accent">Crudo</Badge>}
+                {/* Badge editoriale: mostrato solo se non duplica un flag già visibile. */}
+                {item.badge &&
+                  !['vegetariano', 'vegano', 'piccante', 'crudo'].includes(item.badge.trim().toLowerCase()) && (
+                    <Badge tone="accent">{item.badge}</Badge>
+                  )}
               </div>
               <div className="mt-4 flex items-center justify-between border-t border-brand-100 pt-4 text-sm">
                 <span className="font-bold text-brand-800">{formatPrice(item.price)}</span>

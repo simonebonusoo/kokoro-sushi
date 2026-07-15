@@ -382,6 +382,13 @@ const localAuth = {
     setStoredSession(null);
     return { error: null };
   },
+  /**
+   * In demo il reset password non invia email reali: restituisce comunque un
+   * esito positivo cosi il flusso resta coerente davanti al cliente.
+   */
+  async resetPasswordForEmail(_email: string, _options?: { redirectTo?: string }) {
+    return { data: {}, error: null };
+  },
 };
 
 export const localClient = {

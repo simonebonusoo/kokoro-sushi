@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -17,6 +17,13 @@ const schema = z.object({
 });
 type FormData = z.infer<typeof schema>;
 
+// Account dimostrativi disponibili solo quando l'app gira in modalità demo
+// (nessuna credenziale Supabase reale configurata).
+const demoAccounts = [
+  { label: 'Cliente', email: 'cliente@kokoro.it', password: 'demo1234' },
+  { label: 'Ristoratore', email: 'admin@kokoro.it', password: 'admin1234' },
+];
+
 export function Login() {
   const { signIn } = useAuth();
   const navigate = useNavigate();
@@ -27,6 +34,7 @@ export function Login() {
     register,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
@@ -91,6 +99,33 @@ export function Login() {
               Accedi
             </Button>
           </form>
+
+          {isSupabaseConfigured ? null : (
+            <div className="mt-6 rounded-2xl border border-accent-500/25 bg-accent-500/5 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-600">
+                Accesso demo
+              </p>
+              <p className="mt-1.5 text-sm text-brand-500">
+                Prova l’area riservata con un account dimostrativo.
+              </p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {demoAccounts.map((account) => (
+                  <button
+                    key={account.email}
+                    type="button"
+                    onClick={() => {
+                      setValue('email', account.email, { shouldValidate: true });
+                      setValue('password', account.password, { shouldValidate: true });
+                    }}
+                    className="rounded-xl border border-brand-200 bg-white px-3 py-2.5 text-left transition hover:border-accent-500 hover:shadow-sm"
+                  >
+                    <span className="block text-sm font-semibold text-brand-900">{account.label}</span>
+                    <span className="block truncate text-xs text-brand-400">{account.email}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </Card>
         <p className="mt-6 text-center text-sm text-brand-500">
           Non hai un account?{' '}

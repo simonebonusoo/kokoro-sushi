@@ -1,4 +1,4 @@
+# Anteprima commerciale (demo) — non destinata all'indicizzazione pubblica.
+# Il link resta apribile normalmente, ma i motori di ricerca non lo indicizzano.
 User-agent: *
-Allow: /
-
-Sitemap: https://www.kokorosushiroma.com/sitemap.xml
+Disallow: /

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, LayoutDashboard, Shield } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, LogOut, LayoutDashboard, Shield, ArrowUpRight, Phone } from 'lucide-react';
 import { clsx } from 'clsx';
 import { restaurantConfig } from '@/config/restaurantConfig';
 import { isSupabaseConfigured } from '@/lib/supabase';
@@ -18,6 +18,7 @@ const publicLinks = [
 export function Navbar() {
   const { session, profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -25,6 +26,27 @@ export function Navbar() {
     navigate('/');
     setOpen(false);
   };
+
+  // Chiudi il menu mobile ad ogni cambio pagina.
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  // Blocca lo scroll della pagina sottostante e gestisci il tasto Escape
+  // mentre il menu full-screen è aperto (coerente su Safari iOS e Chrome).
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
 
   return (
     <header className="sticky top-0 z-40 border-b border-brand-100 bg-brand-50/85 backdrop-blur-md">
@@ -114,71 +136,168 @@ export function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="rounded-lg p-2 text-brand-700 md:hidden"
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Menu"
+          className="-mr-2 rounded-lg p-2 text-brand-800 transition hover:bg-brand-100 md:hidden"
+          onClick={() => setOpen(true)}
+          aria-label="Apri il menu"
+          aria-expanded={open}
+          aria-haspopup="dialog"
         >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <Menu className="h-6 w-6" />
         </button>
       </nav>
 
-      {/* Mobile menu */}
-      {open && (
-        <div className="border-t border-brand-100 bg-brand-50 md:hidden">
-          <div className="container-page flex flex-col gap-1 py-4">
-            {publicLinks.map((l) => (
+      {/* Mobile menu full-screen (redesign editoriale) */}
+      <MobileMenu
+        open={open}
+        onClose={() => setOpen(false)}
+        session={Boolean(session)}
+        isAdmin={isAdmin}
+        onSignOut={handleSignOut}
+      />
+    </header>
+  );
+}
+
+function MobileMenu({
+  open,
+  onClose,
+  session,
+  isAdmin,
+  onSignOut,
+}: {
+  open: boolean;
+  onClose: () => void;
+  session: boolean;
+  isAdmin: boolean;
+  onSignOut: () => void;
+}) {
+  if (!open) return null;
+
+  const phoneHref = `tel:${restaurantConfig.contact.phone.replace(/\s+/g, '')}`;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu di navigazione"
+      className="fixed inset-0 z-50 flex h-[100dvh] flex-col bg-brand-50 md:hidden animate-[luxury-panel-in_320ms_cubic-bezier(0.22,1,0.36,1)_both]"
+    >
+      {/* Header pannello */}
+      <div
+        className="flex items-center justify-between border-b border-brand-100 px-5"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 1rem)', paddingBottom: '1rem' }}
+      >
+        <Link to="/" onClick={onClose} aria-label={restaurantConfig.fullName} className="flex items-center gap-2">
+          <BrandLogo variant="navbar" imageClassName="h-8" />
+        </Link>
+        <button
+          onClick={onClose}
+          aria-label="Chiudi il menu"
+          className="-mr-1 flex h-11 w-11 items-center justify-center rounded-full text-brand-800 transition hover:bg-brand-100 active:scale-95"
+        >
+          <X className="h-6 w-6" />
+        </button>
+      </div>
+
+      {/* Navigazione principale */}
+      <nav className="flex flex-1 flex-col justify-center px-5">
+        <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.28em] text-accent-600">
+          Kokoro Sushi Roma
+        </p>
+        <ul className="space-y-1">
+          {publicLinks.map((l, index) => (
+            <li key={l.to}>
               <NavLink
-                key={l.to}
                 to={l.to}
-                onClick={() => setOpen(false)}
+                onClick={onClose}
                 className={({ isActive }) =>
                   clsx(
-                    'relative rounded-lg px-3 py-2.5 text-sm font-medium transition',
-                    isActive
-                      ? 'bg-brand-100 pl-4 text-brand-900 before:absolute before:bottom-1.5 before:left-0 before:top-1.5 before:w-1 before:rounded-full before:bg-gradient-to-b before:from-accent-400 before:to-accent-600'
-                      : 'text-brand-700 hover:bg-brand-100'
+                    'group flex items-baseline gap-4 py-2.5 transition',
+                    isActive ? 'text-brand-900' : 'text-brand-800'
                   )
                 }
               >
-                {l.label}
-              </NavLink>
-            ))}
-            <div className="my-2 h-px bg-brand-100" />
-            {session ? (
-              <>
-                <Link to="/dashboard" onClick={() => setOpen(false)}>
-                  <Button variant="outline" size="sm" fullWidth>
-                    Area cliente
-                  </Button>
-                </Link>
-                {isAdmin && (
-                  <Link to="/admin" onClick={() => setOpen(false)}>
-                    <Button variant="ghost" size="sm" fullWidth>
-                      Pannello Admin
-                    </Button>
-                  </Link>
+                {({ isActive }) => (
+                  <>
+                    <span className="w-6 shrink-0 text-sm font-medium text-brand-300 tabular-nums">
+                      0{index + 1}
+                    </span>
+                    <span
+                      className={clsx(
+                        'heading-serif text-4xl leading-none transition-colors',
+                        isActive ? 'text-brand-900' : 'text-brand-800 group-hover:text-brand-900'
+                      )}
+                    >
+                      {l.label}
+                    </span>
+                    <span
+                      className={clsx(
+                        'ml-auto self-center transition-all duration-200',
+                        isActive ? 'text-accent-600 opacity-100' : 'text-brand-300 opacity-0 group-hover:opacity-100'
+                      )}
+                    >
+                      <ArrowUpRight className="h-5 w-5" />
+                    </span>
+                  </>
                 )}
-                <Button variant="ghost" size="sm" fullWidth onClick={handleSignOut}>
-                  Esci
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+        {/* Azioni secondarie */}
+        <div className="mt-10 border-t border-brand-100 pt-6">
+          {session ? (
+            <div className="grid gap-2">
+              <Link to="/dashboard" onClick={onClose}>
+                <Button variant="outline" size="sm" fullWidth>
+                  <LayoutDashboard className="h-4 w-4" /> Area cliente
                 </Button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" onClick={() => setOpen(false)}>
-                  <Button variant="outline" size="sm" fullWidth>
-                    Accedi
+              </Link>
+              {isAdmin && (
+                <Link to="/admin" onClick={onClose}>
+                  <Button variant="ghost" size="sm" fullWidth>
+                    <Shield className="h-4 w-4" /> Pannello Admin
                   </Button>
                 </Link>
-                <Link to="/prenota" onClick={() => setOpen(false)}>
-                  <Button size="sm" fullWidth>
-                    Prenota un tavolo
-                  </Button>
-                </Link>
-              </>
-            )}
-          </div>
+              )}
+              <Button variant="ghost" size="sm" fullWidth onClick={onSignOut}>
+                <LogOut className="h-4 w-4" /> Esci
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              <Link to="/login" onClick={onClose}>
+                <Button variant="outline" size="md" fullWidth>
+                  Accedi
+                </Button>
+              </Link>
+              <Link to="/prenota" onClick={onClose}>
+                <Button size="md" fullWidth>
+                  Prenota tavolo
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
-      )}
-    </header>
+      </nav>
+
+      {/* Footer pannello: contatto rapido */}
+      <div
+        className="border-t border-brand-100 px-5 text-sm"
+        style={{ paddingTop: '1rem', paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}
+      >
+        <a
+          href={phoneHref}
+          onClick={onClose}
+          className="flex items-center gap-2 text-brand-600 transition hover:text-brand-900"
+        >
+          <Phone className="h-4 w-4 text-accent-600" />
+          <span className="font-medium">{restaurantConfig.contact.phone}</span>
+          <span className="text-brand-300">·</span>
+          <span className="truncate text-brand-400">{restaurantConfig.contact.address}</span>
+        </a>
+      </div>
+    </div>
   );
 }
