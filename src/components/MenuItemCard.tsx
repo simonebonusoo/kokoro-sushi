@@ -12,12 +12,26 @@ interface MenuItemCardProps {
 
 export function MenuItemCard({ item, selected, onSelect }: MenuItemCardProps) {
   const interactive = Boolean(onSelect);
-  const badges = [
-    item.badge,
-    item.is_best_seller ? 'Best seller' : null,
-    item.is_new ? 'Novita' : null,
-    item.is_raw ? 'Crudo' : null,
-  ].filter(Boolean) as string[];
+  // Costruisce l'elenco tag unendo flag e badge editoriale, evitando
+  // duplicati (es. flag "vegetariano" + badge "Vegetariano" -> un solo tag).
+  const tags: { label: string; icon: typeof Sparkles }[] = [];
+  const seen = new Set<string>();
+  const addTag = (label: string | null | undefined, icon: typeof Sparkles) => {
+    const clean = label?.trim();
+    if (!clean) return;
+    const key = clean.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    tags.push({ label: clean, icon });
+  };
+
+  if (item.is_vegetarian) addTag('Vegetariano', Leaf);
+  if (item.is_vegan) addTag('Vegano', Leaf);
+  if (item.is_spicy) addTag('Piccante', Flame);
+  if (item.is_best_seller) addTag('Best seller', Sparkles);
+  if (item.is_new) addTag('Novita', Sparkles);
+  if (item.is_raw) addTag('Crudo', Sparkles);
+  addTag(item.badge, Sparkles);
 
   return (
     <Card
@@ -62,14 +76,13 @@ export function MenuItemCard({ item, selected, onSelect }: MenuItemCardProps) {
           Allergeni: {item.allergens.map((allergen) => allergen.name).join(', ')}
         </p>
       )}
-      <div className="mt-4 flex flex-wrap gap-2">
-        {item.is_vegetarian && <Tag icon={Leaf} label="Vegetariano" />}
-        {item.is_vegan && <Tag icon={Leaf} label="Vegano" />}
-        {item.is_spicy && <Tag icon={Flame} label="Piccante" />}
-        {badges.map((badge) => (
-          <Tag key={badge} icon={Sparkles} label={badge} />
-        ))}
-      </div>
+      {tags.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <Tag key={tag.label} icon={tag.icon} label={tag.label} />
+          ))}
+        </div>
+      )}
     </Card>
   );
 }

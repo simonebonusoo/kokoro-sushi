@@ -71,7 +71,7 @@ export function Footer() {
                 </li>
                 <li className="flex items-center gap-2">
                   <Phone className="h-4 w-4" />
-                  <a href={`tel:${contact.phone}`} className="hover:text-white">
+                  <a href={`tel:${contact.phone.replace(/\s+/g, '')}`} className="hover:text-white">
                     {contact.phone}
                   </a>
                 </li>
