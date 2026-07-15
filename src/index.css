@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Palette runtime. I valori RGB (senza "rgb()") vengono sovrascritti a runtime
+  da applyThemeFromConfig() in src/config/restaurantConfig.ts, cosi cambiando i colori
+  nel config cambia l'intero sito senza toccare il CSS.
+*/
+:root {
+  --brand-50: 248 246 243;
+  --brand-100: 238 232 225;
+  --brand-200: 221 208 193;
+  --brand-300: 200 180 158;
+  --brand-400: 176 150 121;
+  --brand-500: 150 122 92;
+  --brand-600: 122 98 72;
+  --brand-700: 95 76 57;
+  --brand-800: 68 55 42;
+  --brand-900: 41 33 26;
+
+  --accent-400: 230 185 128;
+  --accent-500: 214 162 96;
+  --accent-600: 190 138 72;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+body {
+  @apply bg-brand-50 text-brand-900 font-sans antialiased;
+  background-image:
+    radial-gradient(circle at top right, rgb(var(--accent-500) / 0.08), transparent 22rem),
+    linear-gradient(180deg, rgb(var(--brand-100) / 0.35), transparent 22rem);
+}
+
+/* Scrollbar discreta */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-brand-300 rounded-full;
+}
+::-webkit-scrollbar-track {
+  @apply bg-brand-100;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .section {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+  .heading-serif {
+    @apply font-display font-bold tracking-tight;
+  }
+  .input-base {
+    @apply w-full rounded-xl border border-brand-200 bg-white px-4 py-2.5 text-brand-900
+           shadow-sm outline-none transition
+           placeholder:text-brand-400
+           focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30
+           disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .label-base {
+    @apply mb-1.5 block text-sm font-medium text-brand-700;
+  }
+}
+
+@layer utilities {
+  .luxury-hero-zoom {
+    animation: luxury-hero-zoom 11s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform;
+  }
+
+  .luxury-hero-copy {
+    animation: luxury-hero-copy 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Transizione di pagina: fade + slide-up con sfumatura, ripartita ad ogni navigazione. */
+  .page-transition {
+    animation: luxury-page-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity, filter;
+  }
+
+  /* Sweep di luce che attraversa i bottoni luxury all'hover. */
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn-sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      115deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.45) 48%,
+      rgba(255, 255, 255, 0.15) 56%,
+      transparent 72%
+    );
+    transform: translateX(-130%);
+    transition: transform 0s;
+    pointer-events: none;
+  }
+  .btn-sheen:hover::after,
+  .btn-sheen:focus-visible::after {
+    transform: translateX(130%);
+    transition: transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-sheen > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .luxury-hero-zoom,
+    .luxury-hero-copy,
+    .page-transition {
+      animation: none;
+      will-change: auto;
+    }
+    .btn-sheen::after {
+      display: none;
+    }
+  }
+}
+
+@keyframes luxury-page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.994);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes luxury-hero-zoom {
+  from {
+    transform: scale(1.035);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes luxury-hero-copy {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes luxury-menu-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}

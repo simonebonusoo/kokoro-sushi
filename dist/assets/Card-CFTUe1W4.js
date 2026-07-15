@@ -1,0 +1,1 @@
+import{j as t,a as d}from"./index-C2wxjOiL.js";function i({children:r,padded:a=!0,hover:s,className:e,...o}){return t.jsx("div",{className:d("rounded-2xl border border-brand-100 bg-white shadow-card",a&&"p-5 sm:p-6",s&&"transform-gpu transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:shadow-soft",e),...o,children:r})}export{i as C};
