@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<title>Raccolta Feedback — Kokoro Sushi × BNS Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #251e17;
+    --muted: #8b8075;
+    --soft: #b7ab9d;
+    --accent: #b3743f;
+    --hairline: #eae4dc;
+    --panel: #faf7f3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #fff; }
+  body {
+    font-family: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--ink);
+    font-size: 10.5pt;
+    line-height: 1.6;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @page { size: A4; margin: 0; }
+  .page {
+    width: 210mm;
+    height: 296mm;
+    padding: 16mm 20mm 22mm;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 36px;
+  }
+  .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 9pt; }
+  .wordmark span { color: var(--accent); }
+  .doc-meta { font-size: 8pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+  .doc-footer {
+    position: absolute;
+    left: 20mm;
+    right: 20mm;
+    bottom: 10mm;
+    padding-top: 14px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+
+  .eyebrow {
+    font-size: 8.5pt; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600; font-size: 30pt; line-height: 1.12; margin-bottom: 12px;
+  }
+  .lead { color: var(--muted); max-width: 130mm; margin-bottom: 36px; }
+
+  .q { margin-bottom: 34px; }
+  .q-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600; font-size: 15.5pt; margin-bottom: 4px;
+  }
+  .q-hint { font-size: 9pt; color: var(--soft); margin-bottom: 14px; }
+  .line { height: 30px; border-bottom: 1px solid var(--hairline); }
+  .line + .line { margin-top: 4px; }
+
+  .thanks {
+    margin-top: 8px;
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 9.8pt;
+    color: var(--muted);
+  }
+  .thanks strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGINA 1 ============ -->
+<div class="page">
+  <div class="doc-header">
+    <div class="wordmark">BNS<span>&nbsp;STUDIO</span></div>
+    <div class="doc-meta">Kokoro Sushi Roma · Demo</div>
+  </div>
+
+  <div class="eyebrow">Le vostre impressioni</div>
+  <h1>Raccolta Feedback</h1>
+  <p class="lead">
+    Ogni osservazione, anche la più piccola, ci aiuta a rendere il sito davvero vostro.
+    Compilate con calma — non esistono risposte sbagliate.
+  </p>
+
+  <div class="q">
+    <div class="q-title">Cosa vi è piaciuto di più?</div>
+    <div class="q-hint">Design, sezioni, funzioni, sensazioni generali…</div>
+    <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">Cosa modifichereste?</div>
+    <div class="q-hint">Qualsiasi cosa: testi, colori, disposizione, grafica…</div>
+    <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">Ci sono informazioni errate o da aggiornare?</div>
+    <div class="q-hint">Orari, indirizzo, contatti, piatti, prezzi, descrizioni…</div>
+    <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+
+  <div class="doc-footer">
+    <span>BNS Studio</span>
+    <span>Raccolta feedback · 1 / 2</span>
+  </div>
+</div>
+
+<!-- ============ PAGINA 2 ============ -->
+<div class="page">
+  <div class="doc-header">
+    <div class="wordmark">BNS<span>&nbsp;STUDIO</span></div>
+    <div class="doc-meta">Raccolta feedback</div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">Foto da sostituire o aggiungere?</div>
+    <div class="q-hint">Indicate pure quali immagini vorreste cambiare o inserire.</div>
+    <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">Nuove funzionalità desiderate?</div>
+    <div class="q-hint">Tutto ciò che vi piacerebbe il sito facesse per voi.</div>
+    <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+
+  <div class="q">
+    <div class="q-title">Altre osservazioni</div>
+    <div class="q-hint">Idee, dubbi, suggerimenti liberi.</div>
+    <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+
+  <div class="thanks">
+    <strong>Grazie!</strong> Potete rispondere anche direttamente su WhatsApp, con un messaggio
+    o una nota vocale: come preferite. Ci confrontiamo su tutto a inizio settimana.
+  </div>
+
+  <div class="doc-footer">
+    <span>BNS Studio</span>
+    <span>Raccolta feedback · 2 / 2</span>
+  </div>
+</div>
+
+</body>
+</html>
